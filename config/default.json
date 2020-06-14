@@ -1,3 +1,4 @@
 {
-  "mongoURI": "mongodb+srv://davak:zxcvbnmlp@my-app-jdutu.mongodb.net/2FA?retryWrites=true&w=majority"
+  "mongoURI": "mongodb+srv://davak:zxcvbnmlp@my-app-jdutu.mongodb.net/2FA?retryWrites=true&w=majority",
+  "jwtSecret": "mysecrettoken"
 }

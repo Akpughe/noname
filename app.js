@@ -3,8 +3,9 @@ const connectDB = require('./config/db');
 var cors = require('cors');
 const app = express();
 const config = require('./config/config');
-const userRoutes = require('./routes/user');
+const authRoutes = require('./routes/auth');
 const verifyRoutes = require('./routes/verify');
+const userRoutes = require('./routes/user');
 const bodyParser = require('body-parser');
 
 const client = require('twilio')(config.accountSID, config.authToken);
@@ -25,8 +26,10 @@ app.use(express.json({ extended: false }));
 
 app.get('/', (req, res, next) => res.send('API Running...'));
 
+app.use('/api/auth', authRoutes);
 app.use('/api/user', userRoutes);
 app.use('/api/verify', verifyRoutes);
+
 
 const port = 3000;
 

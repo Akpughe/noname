@@ -1,8 +1,9 @@
 const express = require('express');
 const router = express.Router();
-const authController = require('../controller/auth');
+const userController = require('../controller/user');
+const auth = require('../middleware/auth');
 
-router.post('/', authController.register);
-// router.post('/veri', authController.verify);
+router.get('/all-users', userController.getAllUsers )
 
-module.exports = router
+
+module.exports = router;

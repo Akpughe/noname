@@ -2,6 +2,9 @@ const User = require('../model/User');
 const Verify = require('../model/Verify');
 const config = require('../config/config');
 const { validationResult } = require('express-validator');
+const bcrypt = require('bcryptjs');
+const configg = require('config');
+const jwt = require('jsonwebtoken');
 
 const client = require('twilio')(config.accountSID, config.authToken);
 
@@ -31,13 +34,29 @@ exports.register = async (req, res, next) => {
       password,
     });
 
+    const salt = await bcrypt.genSalt(10);
+
+    user.password = await bcrypt.hash(password, salt);
+
     await client.verify.services(config.serviceID).verifications.create({
       to: `+${req.query.phonenumber}`,
       channel: 'sms',
     });
 
-    user.save();
-    res.send('Awaiting approval');
+    await user.save();
+
+    // res.send('Awaiting approval');
+
+    const payload = {
+      user: {
+        id: user.id,
+      },
+    };
+
+    jwt.sign(payload, configg.get('jwtSecret'), (err, token) => {
+      if (err) throw err;
+      res.json({ token });
+    });
   } catch (err) {
     console.error(err.message);
     res.status(500).send('Server Error');
@@ -54,4 +73,14 @@ exports.register = async (req, res, next) => {
   //       res.status(200).send(data);
   //     });
   // });
+};
+
+exports.getUserById = async (req, res, next) => {
+  try {
+    const user = await User.findById(req.user.id).select('-password');
+    res.json(user);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
 };
