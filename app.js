@@ -5,6 +5,7 @@ const app = express();
 const config = require('./config/config');
 const authRoutes = require('./routes/auth');
 const verifyRoutes = require('./routes/verify');
+const accountRoutes = require('./routes/account')
 const userRoutes = require('./routes/user');
 const bodyParser = require('body-parser');
 
@@ -29,6 +30,7 @@ app.get('/', (req, res, next) => res.send('API Running...'));
 app.use('/api/auth', authRoutes);
 app.use('/api/user', userRoutes);
 app.use('/api/verify', verifyRoutes);
+app.use('/api/account', accountRoutes);
 
 
 const port = 3000;
